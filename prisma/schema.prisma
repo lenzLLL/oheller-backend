@@ -1,0 +1,299 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String   @unique
+  workerType String?
+  password String
+  accountType String?
+  region String?
+  city String?
+  quarter String?
+  fullname String?
+  secteur String?
+  work String?
+  sexe String?
+  contact String?
+  birthday String?
+  diplome String?
+  langue String?
+  experience Int?
+  cv String?
+  public_id_profile String?
+  url_image String?
+  public_id_cv String?
+  url_cv String?
+  type_profil String?
+  isProfilInfosSet Boolean? @default(false)
+  createAt         DateTime @default(now())
+  services Service[]
+  shops Shop[]
+  order Order[]
+  reviews Review[]
+  reviewProducts ReviewProduct[]
+  messagesSent ServiceMessage[] @relation("sentMessages")
+  messageRecieved ServiceMessage[] @relation("recipentMessages")
+  userWorker Workrequest[] @relation("userWorkerRequest")
+  workerWorker Workrequest[] @relation("workerWorkerRequest")
+  productsOrders ProductOrder[]
+  productMessagesSent ProductMessage[] @relation("productMessageSent")
+  productMessagesRecieved ProductMessage[] @relation("productMessageReceived")
+  sondageUsers SondageUsers[]
+  sondages Sondage[]
+  notifications Notification[]
+  transactions Transaction[]
+  liked Liked[]
+  answers SondageAnswers[]
+}
+model Service{
+  id Int @id @default(autoincrement())
+  title String
+  category String
+  description String
+  time Int
+  price Int
+  createdAt DateTime @default(now())
+  images String[]
+  keys String[]
+  features String[]
+  createdBy User @relation(fields: [userId],references: [id])
+  userId Int
+  orders Order[]
+  reviews Review[]
+}
+model Shop{
+  id Int @id @default(autoincrement())
+  name String
+  type String
+  region String
+  city String
+  quarter String
+  description String
+  secteur String
+  disponibilite String
+  cover String
+  keyCover String
+  images String[]
+  keys String[]
+  numbers String[]
+  features String[]
+  createdBy User @relation(fields: [userId],references: [id])
+  userId Int
+  products Product[]
+  orders ProductOrder[]
+  reviews ReviewProduct[]
+}
+model Order {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  buyer User @relation(fields: [buyerId],references: [id])
+  buyerId Int
+  date BigInt
+  isActive Boolean @default(false)
+  paymentIntent String? @unique
+  isCompleted Boolean @default(false)
+  service Service @relation(fields:[serviceId],references: [id])
+  serviceId Int 
+  price BigInt
+  status String? @default("En attente")
+  description String
+  messages ServiceMessage[]
+} 
+model Review {
+  id Int @id @default(autoincrement())
+  createAt DateTime @default(now())
+  rating Int
+  text String
+  service Service @relation(fields: [serviceId],references: [id])
+  serviceId Int
+  buyer User @relation(fields: [buyerId],references: [id])
+  buyerId Int
+}
+model ProductMessage {
+  id Int @id @default(autoincrement())
+  text String
+  createdAt DateTime @default(now())
+  isRead Boolean @default(false)
+  sender User @relation("productMessageSent",fields: [senderId],references: [id])
+  senderId Int
+  recipent User @relation("productMessageReceived",fields: [recipentId],references: [id])
+  recipentId Int
+  date BigInt
+  order ProductOrder @relation(fields: [orderId],references: [id])
+  orderId Int
+}
+model ServiceMessage {
+  id Int @id @default(autoincrement())
+  text String
+  createdAt DateTime @default(now())
+  isRead Boolean @default(false)
+  sender User @relation("sentMessages",fields: [senderId],references: [id])
+  senderId Int
+  recipent User @relation("recipentMessages",fields: [recipentId],references: [id])
+  recipentId Int
+  date BigInt
+  order Order @relation(fields: [orderId],references: [id])
+  orderId Int
+}
+model Product{
+  id Int @id @default(autoincrement())
+  images String[]
+  keys String[]
+  category String
+  price BigInt
+  createdBy Shop @relation(fields: [shopId],references: [id])
+  shopId Int
+  features String[]
+  title String
+  description String
+  keyBook String?
+  book String?
+  size String[]
+  order ProductOrder[]
+  reviews ReviewProduct[]
+  liked Liked[]
+}   
+model ProductOrder {
+  id Int @id @default(autoincrement())
+  size String?
+  price BigInt?
+  totalPrice BigInt?
+  quantity BigInt?
+  shop Shop @relation(fields:[shopId],references: [id])
+  shopId Int
+  customer User @relation(fields: [customerId],references: [id])
+  customerId Int 
+  product Product @relation(fields: [productId],references: [id])
+  productId Int
+  date BigInt
+  status String? @default("En attente")
+  productMessages ProductMessage[]
+}
+model ReviewProduct {
+  id Int @id @default(autoincrement())
+  createAt DateTime @default(now())
+  rating Int
+  text String
+  shop Shop @relation(fields:[shopId],references: [id])
+  shopId Int
+  product Product @relation(fields: [productId],references: [id])
+  productId Int
+  buyer User @relation(fields: [buyerId],references: [id])
+  buyerId Int
+}
+model Sondage{
+  id Int @id @default(autoincrement())
+  customer User @relation(fields: [userId],references: [id])
+  userId Int
+  title String
+  dateInit BigInt
+  dateExpire BigInt
+  numQuest Int
+  ageMin Int
+  ageMax Int
+  sexe String
+  secteur String
+  profession String
+  participants Int
+  status String @default("En attente")
+  isClosed Boolean @default(false)
+  region String
+  city String
+  days Int
+  montant Int?
+  participation Int?
+  questions SondageQuestions[]
+  users SondageUsers[]
+  answers SondageAnswers[]
+}
+model SondageQuestions{
+  id Int @id @default(autoincrement())
+  sondage Sondage @relation(fields: [sondageId],references: [id])
+  sondageId Int
+  type String
+  label String
+  tags String[] @default([])
+  answers SondageAnswers[]
+ 
+}
+model SondageAnswers{
+  id Int @id @default(autoincrement())
+  answer String
+  question SondageQuestions @relation(fields: [questionId],references: [id])
+  questionId Int
+  user User @relation(fields:[userId],references: [id])
+  userId Int
+  sondage Sondage @relation(fields: [sondageId],references: [id])
+  sondageId Int
+  sondageUser SondageUsers @relation(fields: [sondageUserId],references: [id]) 
+  sondageUserId Int
+}
+model SondageUsers{
+  id Int @id @default(autoincrement())
+  sondage Sondage @relation(fields: [sondageId],references: [id])
+  user User @relation(fields: [userId],references: [id])
+  answer SondageAnswers[]
+  sondageId Int
+  isAgree Boolean @default(false)
+  isAvailable Boolean @default(false)
+  userId Int
+}
+model Notification{
+  id Int @id @default(autoincrement())
+  message String
+  title String
+  user User @relation(fields: [userId],references: [id])
+  userId Int
+  isReaded  Boolean @default(false)
+  type String @default("infos")
+}
+model Transaction{
+  id Int @id @default(autoincrement())
+  value BigInt 
+  type String @default("Sortant")
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+}
+model Liked{
+  id Int @id @default(autoincrement())
+  user User @relation(fields:[userId],references:[id])
+  userId Int
+  product Product @relation(fields:[productId],references: [id])
+  productId Int
+}
+model Workrequest{
+  id Int @id @default(autoincrement())
+  user User @relation("userWorkerRequest",fields:[userId],references:[id])
+  userId Int
+  worker User @relation("workerWorkerRequest",fields:[workerId],references:[id])
+  workerId Int
+  isAgree Boolean @default(false)
+}
+model City{
+  id Int @id @default(autoincrement())
+  region String
+  city String
+}
+model Secteur{
+  id Int @id @default(autoincrement())
+  name String
+}
+model Profession{
+  id Int @id @default(autoincrement())
+  secteur String
+  profession String
+}
