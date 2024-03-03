@@ -31,7 +31,7 @@ export const signup = async (req,res,next) => {
                 httpOnly: false,
                 path:"/",
                 maxAge: 30 * 24 * 60 * 60 * 1000, // Durée de vie d'une heure (en millisecondes)
-                sameSite: 'strict',
+                sameSite: 'none',
                 secure: process.env.NODE_ENV === 'production', // Utiliser "true" en production (HTTPS)
               };
           
@@ -71,7 +71,7 @@ export const login = async (req,res,next) => {
               const cookieOptions = {
                 httpOnly: false,
                 maxAge:   30 * 24 * 60 * 60 * 1000, // Durée de vie d'une heure (en millisecondes)
-                sameSite: 'strict',
+                sameSite: 'none',
                 path:"/",
                 secure: process.env.NODE_ENV === 'production', // Utiliser "true" en production (HTTPS)
               };
