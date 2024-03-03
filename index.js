@@ -27,7 +27,7 @@ cloudinary.config({
 
 })
 
-app.use(cors({origin:[process.env.PUBLIC_URL],methods:["GET","POST","DELETE","PUT","PATCH"],credentials:true}))
+app.use(cors({origin:"https://oheller-front-end.vercel.app",methods:["GET","POST","DELETE","PUT","PATCH"],credentials:true}))
 app.use(cookieParser())
 app.use(express.json({limit: '50mb'}))
 app.use("uploads/profiles",express.static("uploads/profiles"))
