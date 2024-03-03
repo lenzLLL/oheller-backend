@@ -17,6 +17,7 @@ import workerRequestRouter from "./routes/WorkerRequestRouter.js"
 import cityRoutes from "./routes/CityRoute.js"
 import secteurRoutes from "./routes/secteurRoute.js"
 import professionRoutes from "./routes/ProfessionRoute.js"
+import cors from "cors"
 dotenv.config()
 const app = express()
 cloudinary.config({
@@ -45,6 +46,8 @@ app.use("/api/",workerRequestRouter)
 app.use("/api/",cityRoutes)
 app.use("/api/",secteurRoutes)
 app.use("/api/",professionRoutes)
+
+app.use(cors());
 const port = process.env.PORT
 app.listen(
     port,()=>{
