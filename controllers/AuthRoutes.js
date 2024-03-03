@@ -24,7 +24,21 @@ export const signup = async (req,res,next) => {
                     password:await generatePassword(password),
                 }
             })
-            return res.status(201).json({user:{id:user.id,email:user.email},jwt:createToken(email,user.id)})
+            const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+                expiresIn: '2d',
+              });
+              const cookieOptions = {
+                httpOnly: false,
+                path:"/",
+                maxAge: 30 * 24 * 60 * 60 * 1000, // Durée de vie d'une heure (en millisecondes)
+                sameSite: 'strict',
+                secure: process.env.NODE_ENV === 'production', // Utiliser "true" en production (HTTPS)
+              };
+          
+              // Envoyer le cookie dans la réponse
+            
+          
+            return res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
 
         }
         return res.status(500).json("Internal server error")
@@ -40,7 +54,7 @@ export const login = async (req,res,next) => {
         const {email,password} = req.body
         if(email && password)
         {
-            const user = await prisma.User.findUnique({
+            const user = await prisma.user.findUnique({
                 where: {email}
             })
             if(!user)
@@ -51,7 +65,20 @@ export const login = async (req,res,next) => {
             if(!auth){
                 return res.status(400).send("Mot de passe invalide")
             }
-            return res.status(201).json({user:{id:user.id,email:user.email},jwt:createToken(email,user.id)})
+            const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+                expiresIn: '2d',
+              });
+              const cookieOptions = {
+                httpOnly: false,
+                maxAge:   30 * 24 * 60 * 60 * 1000, // Durée de vie d'une heure (en millisecondes)
+                sameSite: 'strict',
+                path:"/",
+                secure: process.env.NODE_ENV === 'production', // Utiliser "true" en production (HTTPS)
+              };
+          
+              // Envoyer le cookie dans la réponse
+             
+            return  res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
         }
         return res.status(500).json("Internal server error")
     }
