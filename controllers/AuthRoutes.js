@@ -24,21 +24,22 @@ export const signup = async (req,res,next) => {
                     password:await generatePassword(password),
                 }
             })
-            const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
-                expiresIn: '2d',
-              });
-              const cookieOptions = {
-                httpOnly: false,
-                path:"/",
-                maxAge: 30 * 24 * 60 * 60 * 1000, // Durée de vie d'une heure (en millisecondes)
-                sameSite: 'none',
-                secure: process.env.NODE_ENV === 'production', // Utiliser "true" en production (HTTPS)
-              };
+            // const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+            //     expiresIn: '2d',
+            //   });
+            //   const cookieOptions = {
+            //     httpOnly: false,
+            //     path:"/",
+            //     maxAge: 30 * 24 * 60 * 60 * 1000, // Durée de vie d'une heure (en millisecondes)
+            //     sameSite: 'none',
+            //     secure: process.env.NODE_ENV === 'production', // Utiliser "true" en production (HTTPS)
+            //   };
           
               // Envoyer le cookie dans la réponse
             
           
-            return res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
+//            return res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
+            return res.status(201).json({user:{id:user.id,email:user.email}})
 
         }
         return res.status(500).json("Internal server error")
@@ -65,20 +66,21 @@ export const login = async (req,res,next) => {
             if(!auth){
                 return res.status(400).send("Mot de passe invalide")
             }
-            const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
-                expiresIn: '2d',
-              });
-              const cookieOptions = {
-                httpOnly: false,
-                maxAge:   30 * 24 * 60 * 60 * 1000, // Durée de vie d'une heure (en millisecondes)
-                sameSite: 'none',
-                path:"/",
-                secure: process.env.NODE_ENV === 'production', // Utiliser "true" en production (HTTPS)
-              };
+            // const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+            //     expiresIn: '2d',
+            //   });
+            //   const cookieOptions = {
+            //     httpOnly: false,
+            //     maxAge:   30 * 24 * 60 * 60 * 1000, // Durée de vie d'une heure (en millisecondes)
+            //     sameSite: 'none',
+            //     path:"/",
+            //     secure: process.env.NODE_ENV === 'production', // Utiliser "true" en production (HTTPS)
+            //   };
           
               // Envoyer le cookie dans la réponse
              
-            return  res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
+//            return  res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
+            return  res.status(201).json({user:{id:user.id,email:user.email}})
         }
         return res.status(500).json("Internal server error")
     }
