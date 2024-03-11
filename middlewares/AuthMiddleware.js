@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 
 export const verifyToken = (req,res,next) => {
-    if(!req.cookies.jwt)
+    if(!req.signedCookies.jwt)
     {
         return res.status(404).send("token is not found")
     }
