@@ -24,9 +24,9 @@ export const signup = async (req,res,next) => {
                     password:await generatePassword(password),
                 }
             })
-            // const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
-            //     expiresIn: '2d',
-            //   });
+             const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+                 expiresIn: '2d',
+               });
             //   const cookieOptions = {
             //     httpOnly: false,
             //     path:"/",
@@ -39,7 +39,7 @@ export const signup = async (req,res,next) => {
             
           
 //            return res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
-            return res.status(201).json({user:{id:user.id,email:user.email}})
+            return res.status(201).json({jwt:token,user:{id:user.id,email:user.email}})
 
         }
         return res.status(500).json("Internal server error")
