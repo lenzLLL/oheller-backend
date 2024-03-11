@@ -66,9 +66,9 @@ export const login = async (req,res,next) => {
             if(!auth){
                 return res.status(400).send("Mot de passe invalide")
             }
-            // const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
-            //     expiresIn: '2d',
-            //   });
+             const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+                 expiresIn: '2d',
+               });
             //   const cookieOptions = {
             //     httpOnly: false,
             //     maxAge:   30 * 24 * 60 * 60 * 1000, // Durée de vie d'une heure (en millisecondes)
@@ -80,7 +80,7 @@ export const login = async (req,res,next) => {
               // Envoyer le cookie dans la réponse
              
 //            return  res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
-            return  res.status(201).json({user:{id:user.id,email:user.email}})
+            return  res.status(201).json({jwt:token, user:{id:user.id,email:user.email}})
         }
         return res.status(500).json("Internal server error")
     }
