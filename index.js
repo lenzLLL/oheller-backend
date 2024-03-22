@@ -27,7 +27,7 @@ cloudinary.config({
 
 })
 
-app.use(cors({origin:"https://oheller-front-end.vercel.app",methods:["GET","POST","DELETE","PUT","PATCH"],credentials:true}))
+app.use(cors({origin:"https://www.oheller.com",methods:["GET","POST","DELETE","PUT","PATCH"],credentials:true}))
 //app.use(cors({origin:"http://localhost:3000",methods:["GET","POST","DELETE","PUT","PATCH"],credentials:true}))
 app.use(cookieParser())
 app.use(express.json({limit: '50mb'}))
