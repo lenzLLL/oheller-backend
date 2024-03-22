@@ -38,8 +38,8 @@ export const signup = async (req,res,next) => {
               // Envoyer le cookie dans la réponse
             
           
-//            return res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
-            return res.status(201).json({jwt:token,user:{id:user.id,email:user.email}})
+           return res.cookie('jwt', token, cookieOptions).status(201).json({user:{id:user.id,email:user.email}})
+            
 
         }
         return res.status(500).json("Internal server error")
