@@ -78,6 +78,9 @@ export const getAllSondages = async (req,res) => {
             },
             orderBy:{
                 id:"desc"
+            },
+             where:{
+                userId:req.userId
             }
         })
         for(let i = 0;i<sondages.length;i++)
