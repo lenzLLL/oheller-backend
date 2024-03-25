@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-import { genSalt,hash,compare } from "bcrypt"
+import { genSalt,hash,compareAsync } from "bcrypt"
 import cloudinary from "cloudinary"
 import jwt from "jsonwebtoken"
 const generatePassword = async (password) => {
@@ -70,7 +70,8 @@ export const login = async (req,res,next) => {
             {
                 return res.status(401).send("Pas d'utilisateur")
             }
-            const auth = compare(password,user.password)
+            const auth = await  compareSync(password,user.password)
+
             if(!auth){
                 return res.status(400).send("Mot de passe invalide")
             }
