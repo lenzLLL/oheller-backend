@@ -68,7 +68,7 @@ export const login = async (req,res,next) => {
             })
             if(!user)
             {
-                return res.status(400).send("Pas d'utilisateur")
+                return res.status(401).send("Pas d'utilisateur")
             }
             const auth = compare(password,user.password)
             if(!auth){
