@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-import { genSalt,hash,compareAsync } from "bcrypt"
+import { genSalt,hash,compareSync } from "bcrypt"
 import cloudinary from "cloudinary"
 import jwt from "jsonwebtoken"
 const generatePassword = async (password) => {
