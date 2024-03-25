@@ -18,6 +18,13 @@ export const signup = async (req,res,next) => {
         const {email,password} = req.body
         if(email && password)
         {
+             const verifyEmail = await prisma.user.findFirst({
+            where:{
+            email:email
+            }})
+            if(verifyEmail){
+                return res.status(400).send("")
+            }
             const user = await prisma.user.create({
                 data:{
                     email,
