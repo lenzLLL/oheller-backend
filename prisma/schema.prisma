@@ -37,6 +37,7 @@ model User {
   url_image String?
   public_id_cv String?
   url_cv String?
+  isActivated Boolean? @default(false)
   type_profil String?
   isProfilInfosSet Boolean? @default(false)
   createAt         DateTime @default(now())
