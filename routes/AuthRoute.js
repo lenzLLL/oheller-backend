@@ -12,4 +12,6 @@ authRoutes.post("/set-user-image",verifyToken,setUserImage)
 authRoutes.post("/set-user-cv",verifyToken,setUserCv)
 authRoutes.get("/get-all-users",getAllUsers)
 authRoutes.get("/get-all-experts",verifyToken,getAllExperts)
+authRoutes.post("/activate-account",activateAccount)
+
 export default authRoutes
