@@ -359,3 +359,31 @@ export const getLastLogger = async (req,res,next) =>{
         return res.status(500).send("Internal server error")
     }
 }
+
+export const activateAccount = async (req,res) =>{
+    try{
+        const prisma = new PrismaClient()
+        const user = await prisma.user.update(
+            {
+                data:{
+                    isActivated:true
+                },
+                where:{
+                    id:parseInt(req.body.userId)
+                }
+            },
+            
+        )
+      if(!user){
+          return res.status(404).send("not found")
+      }
+      else{
+          return res.status(200).send("successful")
+      }
+    } 
+    catch(err)
+    {
+        console.log(err)
+        return res.status(500).send("Internal server error")
+    }
+}
