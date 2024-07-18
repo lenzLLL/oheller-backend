@@ -2,6 +2,8 @@ import { PrismaClient } from "@prisma/client"
 import { genSalt,hash,compareSync } from "bcrypt"
 import cloudinary from "cloudinary"
 import jwt from "jsonwebtoken"
+import { sendEmail } from "../utils/sendMail.js"
+
 const generatePassword = async (password) => {
     const salt = await genSalt()
     return await hash(password,salt)
@@ -46,8 +48,10 @@ export const signup = async (req,res,next) => {
             
             //return  res.status(201).json({jwt:token, user:{id:user.id,email:user.email}})
           
-           return res.cookie('jwt', token, cookieOptions).status(201).json({jwt:token,user:{id:user.id,email:user.email}})
-            
+           //return res.cookie('jwt', token, cookieOptions).status(201).json({jwt:token,user:{id:user.id,email:user.email}})
+              await sendEmail(email,"Hello","Votre compte Oheller a bien été créé. Veillez cliquer sur le lien suivant  pour l'activer: \noheller.com/activated/"+user.id+"\nCordialement")
+
+          return res.status(200).send("okay")
 
         }
         return res.status(500).json("Internal server error")
