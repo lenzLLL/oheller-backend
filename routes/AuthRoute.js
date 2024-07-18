@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { signup ,login, setUserCv, getAllUsers, getAllExperts, getLastLogger} from "../controllers/AuthRoutes.js"
+import { signup ,login, setUserCv, getAllUsers, getAllExperts, getLastLogger,activateAccount} from "../controllers/AuthRoutes.js"
 import { verifyToken } from "../middlewares/AuthMiddleware.js"
 import { getUserInfos, setUserProfil,setUserImage} from "../controllers/AuthRoutes.js"
 const authRoutes = Router()
