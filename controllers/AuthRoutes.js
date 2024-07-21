@@ -79,6 +79,11 @@ export const login = async (req,res,next) => {
             if(!auth){
                 return res.status(400).send("Mot de passe invalide")
             }
+               if(!user.isActivated){
+               await sendEmail(email,"Hello","Votre compte Oheller a bien été créé. Veillez cliquer sur le lien suivant  pour l'activer: \noheller.com/activated/"+user.id+"\nCordialement")
+               return res.status(402).send("Veillez activer votre compte")
+                
+            }
              const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
                  expiresIn: '2d',
                });
@@ -91,7 +96,7 @@ export const login = async (req,res,next) => {
                };
           
               // Envoyer le cookie dans la réponse
-             
+          
            return  res.cookie('jwt', token, cookieOptions).status(201).json({jwt:token,user:{id:user.id,email:user.email}})
            // return  res.status(201).json({jwt:token, user:{id:user.id,email:user.email}})
         }
