@@ -204,8 +204,61 @@ export const searchServiceByTerm = async (req,res,next) => {
             const services = await prisma.service.findMany(
                 createSearchQuery(req.query.searchTerm.toString(),req.query.category.toString())
             )
-            return res.status(200).json({services})
+             const shops  = await prisma.shop.findMany(
+                {where:{
+                    OR:[
+                        {
+                            name:{contains:req.query.searchTerm,mode:"insensitive"}
+                        },
+                        {
+                            secteur:{contains:req.query.searchTerm,mode:"insensitive"}
+                        }
+                    ]
+                },
+                include:{
+                    createdBy:true,
+                    reviews:true,
+                    products:{include:{reviews:true}}
+    
+                }
+                }       
+            )
+            for(let j = 0;j<shops.length;j++)
+            {
+            for(let i = 0;i<shops[j].products.length;i++)
+                {
+                    shops[j].products[i].price = parseInt(shops[j].products[i].price)
+                }
+            }
+            const products  = await prisma.product.findMany(
+                {where:{
+                    OR:[
+                        {
+                            title:{contains:req.query.searchTerm,mode:"insensitive"}
+                        },
+                        {
+                            category:{contains:req.query.searchTerm,mode:"insensitive"}
+                        }
+                    ]
+                },
+                include:{
+                    createdBy:true
+                }
+                }       
+            )
+            let p = []
+            for(let j = 0;j<products.length;j++)
+                {
+                    p.push(products[j])
+                    p[p.length-1].price = p[p.length-1].price.toString()
+                }
+            return res.status(200).json({services,shops,products:p})
         }
+       
+
+
+
+        
         return res.status(400).send("l'identifiant du service est requi")
     
     }
