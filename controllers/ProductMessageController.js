@@ -82,6 +82,14 @@ export const getProductMessages = async (req,res,next) => {
           {
             messages[i].date = messages[i].date.toString()
           }
+           await prisma.user.update({
+            where:{
+                id:req.userId
+            },
+            data:{
+                msg:0
+            }
+          })
           return res.status(200).json({messages,recipentId})
         }
         return res.status(400).send("Order id is required")
