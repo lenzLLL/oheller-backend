@@ -18,6 +18,18 @@ export const addProductMessage = async (req,res,next) => {
                     date:parseInt(req.body.date)
                 }
             })
+            
+let msg = await prisma.user.findFirst({
+                where:{
+                    id:parseInt(body.body.recipentId)
+                }
+            })
+            msg = msg? msg:0
+            await prisma.user.update({
+                where:{
+                    msg:msg+1
+                }
+            })
             message.date = message.date.toString()
             return res.status(201).json({message})
         }
