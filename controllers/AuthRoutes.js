@@ -135,6 +135,8 @@ export const setUserProfil = async (req,res) => {
             const { accountType,region,
                 city,
                 quarter,
+                currentPictures,
+                pictures,
                 fullname ,
                 workerType,
                 secteur,
@@ -201,7 +203,17 @@ export const setUserProfil = async (req,res) => {
             {
                 finalData.birthday = birthday.toString()
             }
-            
+            if(pictures.length > 0 ){
+                let finalPictures = currentPictures? [...currentPictures]:[]
+                for(let i = 0;i<pictures.length;i++)
+                    {
+                        const result = await cloudinary.v2.uploader.upload(pictures[i],{
+                            folder:"pictures"
+                        })
+                        finalPictures.push(result.secure_url)
+                    }
+                    finalData.pictures = finalPictures
+            }
             if(experience)
             {
             finalData.experience = parseInt(experience)
