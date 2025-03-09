@@ -27,8 +27,8 @@ cloudinary.config({
 
 })
 
- app.use(cors({origin:"https://www.oheller.com",methods:["GET","POST","DELETE","PUT","PATCH"],credentials:true}))
-// app.use(cors({origin:"http://localhost:3000",methods:["GET","POST","DELETE","PUT","PATCH"],credentials:true}))
+//app.use(cors({origin:"https://www.oheller.com",methods:["GET","POST","DELETE","PUT","PATCH"],credentials:true}))
+app.use(cors({origin:"http://localhost:3000",methods:["GET","POST","DELETE","PUT","PATCH"],credentials:true}))
 app.use(cookieParser())
 app.use(express.json({limit: '50mb'}))
 app.use("uploads/profiles",express.static("uploads/profiles"))
